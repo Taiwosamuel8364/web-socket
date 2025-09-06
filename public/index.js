@@ -18,6 +18,18 @@ socket.on("connect_error", (err) => {
     console.error("Connection error:", err);
 });
 
+// Load messages from localStorage on page load
+window.addEventListener("DOMContentLoaded", () => {
+    const saved = localStorage.getItem("adorable-chat-messages");
+    if (saved) output.innerHTML = saved;
+});
+
+// Save messages to localStorage whenever output changes
+function saveMessages() {
+    localStorage.setItem("adorable-chat-messages", output.innerHTML);
+}
+
+
 // event listeners for the send button
 btn.addEventListener("click", () => {
     // sending message from the client
@@ -27,6 +39,8 @@ btn.addEventListener("click", () => {
     });
 
     output.innerHTML += `<p class="sender-message"><strong>${handle.value}: </strong>${message.value}</p>`;
+    // Save message in local storage after adding a message
+    saveMessages();
     message.value = ""
 });
 
@@ -47,6 +61,8 @@ joinRoomBtn.addEventListener("click", (e) => {
 socket.on("receive-message", message => {
     feedback.innerHTML = ""
     output.innerHTML += `<p class="receiver-message"><strong>${message.handle}: </strong>${message.message}</p>`;
+    // Saving messages after receiving a message
+    saveMessages();
 });
 
 //listtening to typing on the client side

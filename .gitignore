@@ -118,3 +118,4 @@ logs
 
 # Local development
 .env.local
+*vercel.json
